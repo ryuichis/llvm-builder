@@ -1,0 +1,20 @@
+name: CI for Yanagiba Swift-AST
+on: [push, pull_request]
+
+jobs:
+  linux-x86_64:
+    name: linux-x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: sh linux-x86_64.sh
+  darwin-x86_64:
+    name: darwin-x86_64
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: sh darwin-x86_64.sh
