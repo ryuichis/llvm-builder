@@ -1,4 +1,4 @@
-name: CI for Yanagiba Swift-AST
+name: CI for building LLVM
 on: [push, pull_request]
 
 jobs:
@@ -10,6 +10,10 @@ jobs:
         with:
           fetch-depth: 1
       - run: sh linux-x86_64.sh
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-linux-x86_64
+          path: llvm-9.0.0-linux-x86_64.tar.gz
   darwin-x86_64:
     name: darwin-x86_64
     runs-on: macOS-latest
@@ -18,3 +22,7 @@ jobs:
         with:
           fetch-depth: 1
       - run: sh darwin-x86_64.sh
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-darwin-x86_64
+          path: llvm-9.0.0-darwin-x86_64.tar.gz
