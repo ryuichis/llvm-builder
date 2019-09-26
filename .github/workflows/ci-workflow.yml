@@ -42,3 +42,15 @@ jobs:
         with:
           name: llvm-9.0.0-linux-i386
           path: llvm-9.0.0-linux-i386.tar.gz
+  windows-x86_64:
+    name: windows-x86_64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: windows-x86_64.bat
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-windows-x86_64
+          path: llvm-9.0.0-windows-x86_64.tar.gz
