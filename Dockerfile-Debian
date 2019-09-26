@@ -1,0 +1,26 @@
+ARG OS_NAME=debian
+ARG OS_VERSION=buster
+ARG ARCH=arm64
+FROM multiarch/${OS_NAME}-debootstrap:${ARCH}-${OS_VERSION}
+
+# Test with non-root user.
+ENV TRAVIS_USER travis_ci
+ENV WORK_DIR "/build"
+
+RUN uname -a
+RUN echo "deb http://ftp.us.debian.org/debian/ unstable main" >> /etc/apt/sources.list
+RUN echo "deb-src http://ftp.us.debian.org/debian/ unstable main" >> /etc/apt/sources.list
+RUN apt-get update -qq && \
+  apt-get install -yq --no-install-suggests --no-install-recommends --allow-unauthenticated \
+  build-essential gcc-7 g++-7 make cmake git sudo
+
+# Create test user and the environment
+RUN useradd "${TRAVIS_USER}"
+WORKDIR "${WORK_DIR}"
+COPY . .
+RUN chown -R "${TRAVIS_USER}:${TRAVIS_USER}" "${WORK_DIR}"
+
+# Enable sudo without password for convenience.
+RUN echo "${TRAVIS_USER} ALL = NOPASSWD: ALL" >> /etc/sudoers
+
+USER "${TRAVIS_USER}"

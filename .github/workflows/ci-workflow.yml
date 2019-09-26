@@ -2,39 +2,43 @@ name: CI for building LLVM
 on: [push, pull_request]
 
 jobs:
-  # linux-x86_64:
-  #   name: linux-x86_64
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #       with:
-  #         fetch-depth: 1
-  #     - run: sh linux-x86_64.sh
-  #     - uses: actions/upload-artifact@master
-  #       with:
-  #         name: llvm-9.0.0-linux-x86_64.tar.gz
-  #         path: llvm-9.0.0-linux-x86_64.tar.gz
-  # darwin-x86_64:
-  #   name: darwin-x86_64
-  #   runs-on: macOS-latest
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #       with:
-  #         fetch-depth: 1
-  #     - run: sh darwin-x86_64.sh
-  #     - uses: actions/upload-artifact@master
-  #       with:
-  #         name: llvm-9.0.0-darwin-x86_64.tar.gz
-  #         path: llvm-9.0.0-darwin-x86_64.tar.gz
-  windows-x86_64:
-    name: windows-x86_64
-    runs-on: windows-latest
+  darwin-x86_64:
+    name: darwin-x86_64
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
-      - run: windows-x86_64.bat
+      - run: sh darwin-x86_64.sh
       - uses: actions/upload-artifact@master
         with:
-          name: llvm-9.0.0-windows-x86_64.tar.gz
-          path: llvm-9.0.0-windows-x86_64.tar.gz
+          name: llvm-9.0.0-darwin-x86_64
+          path: llvm-9.0.0-darwin-x86_64.tar.gz
+  linux-x86_64:
+    name: linux-x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: sh linux-x86_64.sh
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-linux-x86_64
+          path: llvm-9.0.0-linux-x86_64.tar.gz
+  linux-i386:
+    name: linux-i386
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: |
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          travis_retry docker build --rm -t travis_ci --build-arg ARCH=i386 -f Dockerfile-Debian .
+          docker run --name travis_ci_job -t travis_ci bash -c "sh linux-i386.sh"
+          docker cp travis_ci_job:/build/llvm-9.0.0-linux-i386.tar.gz llvm-9.0.0-linux-i386.tar.gz
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-linux-i386
+          path: llvm-9.0.0-linux-i386.tar.gz
