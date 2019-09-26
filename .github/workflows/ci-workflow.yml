@@ -42,6 +42,38 @@ jobs:
         with:
           name: llvm-9.0.0-linux-i386
           path: llvm-9.0.0-linux-i386.tar.gz
+  linux-aarch64:
+    name: linux-aarch64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: |
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          docker build --rm -t travis_ci --build-arg ARCH=arm64 -f Dockerfile-Debian .
+          docker run --name travis_ci_job -t travis_ci bash -c "sh linux-aarch64.sh"
+          docker cp travis_ci_job:/build/llvm-9.0.0-linux-aarch64.tar.gz llvm-9.0.0-linux-aarch64.tar.gz
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-linux-aarch64
+          path: llvm-9.0.0-linux-aarch64.tar.gz
+  linux-armv7l:
+    name: linux-armv7l
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: |
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          docker build --rm -t travis_ci --build-arg ARCH=armhf -f Dockerfile-Debian .
+          docker run --name travis_ci_job -t travis_ci bash -c "sh linux-armv7l.sh"
+          docker cp travis_ci_job:/build/llvm-9.0.0-linux-armv7l.tar.gz llvm-9.0.0-linux-armv7l.tar.gz
+      - uses: actions/upload-artifact@master
+        with:
+          name: llvm-9.0.0-linux-armv7l
+          path: llvm-9.0.0-linux-armv7l.tar.gz
   # windows-x86_64:
   #   name: windows-x86_64
   #   runs-on: windows-latest
