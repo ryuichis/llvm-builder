@@ -1,4 +1,4 @@
-wget http://releases.llvm.org/8.0.1/llvm-8.0.1.src.tar.xz
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-8.0.1/llvm-8.0.1.src.tar.xz
 tar xf llvm-8.0.1.src.tar.xz
 mkdir llvm-8.0.1.build
 cd llvm-8.0.1.build/
