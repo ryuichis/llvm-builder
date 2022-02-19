@@ -1,6 +1,6 @@
 git clone https://github.com/llvm/llvm-project.git
 cd llvm-project
-git checkout llvmorg-13.0.0
+git checkout llvmorg-13.0.1
 cd ..
 mkdir llvm-build
 cd llvm-build/
@@ -10,4 +10,4 @@ make install
 cd ..
 tar cJf llvm-release.tar.xz llvm-release/
 
-# llvm-13.0.0-arm64-apple-darwin.tar.xz
+# llvm-13.0.1-arm64-apple-darwin.tar.xz
