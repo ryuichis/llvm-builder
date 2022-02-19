@@ -4,7 +4,7 @@ git checkout llvmorg-13.0.1
 cd ..
 mkdir llvm-build
 cd llvm-build/
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../llvm-release -DLLVM_ENABLE_PROJECTS=clang -G "Unix Makefiles" ../llvm-project/llvm
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../llvm-release -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" -G "Unix Makefiles" ../llvm-project/llvm
 make -j4
 make install
 cd ..
